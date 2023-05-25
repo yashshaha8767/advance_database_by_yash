@@ -1,0 +1,49 @@
+6. Write Java Program to save image into ORDBMS
+
+ChatGPT
+To save an image into an Object-Relational Database Management System (ORDBMS) using Java, you can use the JDBC (Java Database Connectivity) API to establish a connection with the database and execute SQL queries. Here's an example program that demonstrates how to save an image into an ORDBMS:
+
+java
+Copy code
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class SaveImageToORDBMS {
+    public static void main(String[] args) {
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/mydatabase";
+        String username = "your_username";
+        String password = "your_password";
+
+        String imagePath = "path_to_image_file";
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+            String insertQuery = "INSERT INTO images (image_data) VALUES (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+
+            // Read the image file into an InputStream
+            InputStream inputStream = new FileInputStream(imagePath);
+
+            // Set the InputStream as a parameter in the prepared statement
+            preparedStatement.setBinaryStream(1, inputStream);
+
+            // Execute the query to save the image
+            int rowsAffected = preparedStatement.executeUpdate();
+            System.out.println("Image saved successfully. Rows affected: " + rowsAffected);
+
+            // Close the resources
+            preparedStatement.close();
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+Make sure to replace the following placeholders with your actual database connection details:
+
+jdbcUrl: The JDBC URL of your ORDBMS. Update it according to the specific database you're using.
+username: Your database username.
+password: Your database password.
+imagePath: The path to the image file you want to save in the ORDBMS.

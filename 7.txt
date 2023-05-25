@@ -1,0 +1,62 @@
+7. create table locations(locid varchar(5),city varchar(10),state varchar(5),country 
+varchar(10)); 
+ create table sales(pid varchar(5),timeid varchar(5),locid varchar(5),sales varchar(5)); 
+ create table products(pid varchar(5), pname varchar(10), category varchar(15),price 
+varchar(5)); 
+ create table time(timeid varchar(5),year varchar(5));
+ Perform OLAP operations CUBE and ROLLUP.
+ChatGPT
+To perform OLAP operations CUBE and ROLLUP on the given tables, you can use SQL queries. Here's an example:
+
+sql
+Copy code
+-- Create the "locations" table
+CREATE TABLE locations (
+  locid VARCHAR(5),
+  city VARCHAR(10),
+  state VARCHAR(5),
+  country VARCHAR(10)
+);
+
+-- Create the "sales" table
+CREATE TABLE sales (
+  pid VARCHAR(5),
+  timeid VARCHAR(5),
+  locid VARCHAR(5),
+  sales VARCHAR(5)
+);
+
+-- Create the "products" table
+CREATE TABLE products (
+  pid VARCHAR(5),
+  pname VARCHAR(10),
+  category VARCHAR(15),
+  price VARCHAR(5)
+);
+
+-- Create the "time" table
+CREATE TABLE time (
+  timeid VARCHAR(5),
+  year VARCHAR(5)
+);
+
+Once the tables are created, you can perform OLAP operations CUBE and ROLLUP using appropriate queries. Here are the examples:
+
+CUBE operation:
+The CUBE operation generates all possible combinations of grouping sets, including all dimensions. In this example, let's calculate the total sales for each combination of locid, pid, and year.
+sql
+Copy code
+
+SELECT locid, pid, year, SUM(sales) AS total_sales
+FROM sales
+GROUP BY CUBE(locid, pid, year);
+
+
+ROLLUP operation:
+The ROLLUP operation generates hierarchical subtotals and a grand total based on the specified dimensions. In this example, let's calculate the total sales for each combination of locid, pid, and year, with subtotals based on locid and pid.
+sql
+Copy code
+
+SELECT locid, pid, year, SUM(sales) AS total_sales
+FROM sales
+GROUP BY ROLLUP(locid, pid, year);

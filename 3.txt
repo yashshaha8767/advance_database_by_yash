@@ -1,0 +1,22 @@
+Create table Employee (FirstName, LastName, EmpId, Sallary) insert values for 10 
+employees and apply Hash partitioning technique.
+
+CREATE TABLE Employee (
+  FirstName VARCHAR(50),
+  LastName VARCHAR(50),
+  EmpId INT,
+  Salary DECIMAL(10, 2)
+) PARTITION BY HASH (EmpId);
+
+-- Insert values into the table
+INSERT INTO Employee (FirstName, LastName, EmpId, Salary)
+VALUES ('John', 'Doe', 1, 5000),
+       ('Jane', 'Smith', 2, 6000),
+       ('Mike', 'Johnson', 3, 5500),
+       ('Sarah', 'Williams', 4, 6500),
+       ('David', 'Brown', 5, 7000),
+       ('Emily', 'Davis', 6, 4500),
+       ('Michael', 'Miller', 7, 8000),
+       ('Jessica', 'Anderson', 8, 7500),
+       ('Christopher', 'Wilson', 9, 9000),
+       ('Michelle', 'Thompson', 10, 8500);

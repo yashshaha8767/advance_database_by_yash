@@ -1,0 +1,97 @@
+
+5. Create an “employee” table with necessary schema-eid, ename, esal, ecity on one 
+computer. Insert at least 10 rows in it. Using Frontend to Backend connectivity and 
+client- server socket programming, perform Vertical fragmentation by giving 
+appropriate query in SQL from client side.
+
+ChatGPT
+To perform vertical fragmentation on the "employee" table using client-server socket programming, you need to follow these steps:
+
+Set up the server-side code to handle client requests and execute SQL queries. You can use a programming language like Python and a library like socket to create the server. Here's an example of a simple server implementation:
+python
+Copy code
+import socket
+import sqlite3
+
+# Establish a connection to the database
+conn = sqlite3.connect('employee.db')
+cursor = conn.cursor()
+
+# Create the employee table if it doesn't exist
+cursor.execute('''CREATE TABLE IF NOT EXISTS employee (
+                    eid INT PRIMARY KEY,
+                    ename TEXT,
+                    esal REAL,
+                    ecity TEXT
+                )''')
+conn.commit()
+
+# Insert sample data into the employee table
+sample_data = [
+    (1, 'John Doe', 5000, 'New York'),
+    (2, 'Jane Smith', 6000, 'Los Angeles'),
+    (3, 'David Johnson', 4500, 'Chicago'),
+    (4, 'Emily Davis', 5500, 'New York'),
+    (5, 'Michael Wilson', 7000, 'Los Angeles'),
+    (6, 'Sarah Brown', 4000, 'Chicago'),
+    (7, 'Robert Jones', 5500, 'New York'),
+    (8, 'Jennifer Anderson', 6000, 'Los Angeles'),
+    (9, 'William Davis', 4500, 'Chicago'),
+    (10, 'Jessica Moore', 5500, 'New York')
+]
+
+cursor.executemany("INSERT INTO employee VALUES (?, ?, ?, ?)", sample_data)
+conn.commit()
+
+# Start the server
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = 'localhost'
+port = 12345
+server_socket.bind((host, port))
+server_socket.listen(1)
+print('Server listening on {}:{}'.format(host, port))
+
+while True:
+    # Accept client connections
+    client_socket, addr = server_socket.accept()
+    print('Accepted connection from', addr)
+
+    # Receive SQL query from the client
+    query = client_socket.recv(1024).decode()
+    print('Received query:', query)
+
+    # Execute the query and send back the result
+    cursor.execute(query)
+    result = cursor.fetchall()
+    client_socket.sendall(str(result).encode())
+
+    # Close the connection
+    client_socket.close()
+Set up the client-side code to connect to the server and send SQL queries. Here's an example of a simple client implementation:
+python
+Copy code
+import socket
+
+# Connect to the server
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = 'localhost'
+port = 12345
+client_socket.connect((host, port))
+
+# Send the SQL query to perform vertical fragmentation
+query = "SELECT eid, ename FROM employee"
+client_socket.sendall(query.encode())
+
+# Receive and print the result from the server
+result = client_socket.recv(1024).decode()
+print('Result:', result)
+
+# Close the connection
+client_socket.close()
+Execute the server-side code to start the server.
+
+Execute the client-side code to connect to the server and send the SQL query for vertical fragmentation.
+
+Note: In the client-side code, the example query selects only the "eid" and "ename" columns from the "employee" table. You can modify the query to select different columns based on your vertical fragmentation criteria or requirements.
+
+Ensure you have the SQLite database file named 'employee.db' in the same directory as the server-side code. Also, make sure you have the necessary permissions and libraries installed to run the code successfully.

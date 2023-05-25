@@ -1,0 +1,35 @@
+1. Create table Employee (FirstName, LastName, EmpId, Sallary) insert values for 10 
+employees and apply Range and List partitioning techniques.
+
+CREATE TABLE Employee (
+  FirstName VARCHAR(50),
+  LastName VARCHAR(50),
+  EmpId INT,
+  Salary DECIMAL(10, 2)
+)
+PARTITION BY RANGE (EmpId) (
+  PARTITION p1 VALUES LESS THAN (100),
+  PARTITION p2 VALUES LESS THAN (200),
+  PARTITION p3 VALUES LESS THAN (300),
+  PARTITION p4 VALUES LESS THAN (MAXVALUE)
+)
+PARTITION BY LIST (LastName) (
+  PARTITION pA VALUES IN ('Smith', 'Johnson', 'Williams'),
+  PARTITION pB VALUES IN ('Jones', 'Brown', 'Davis'),
+  PARTITION pC VALUES IN ('Miller', 'Wilson', 'Moore'),
+  PARTITION pD VALUES IN ('Taylor', 'Anderson', 'Thomas'),
+  PARTITION pE VALUES IN (DEFAULT)
+);
+
+INSERT INTO Employee (FirstName, LastName, EmpId, Salary)
+VALUES
+  ('John', 'Smith', 101, 5000),
+  ('Mary', 'Johnson', 102, 6000),
+  ('Robert', 'Williams', 103, 5500),
+  ('Michael', 'Jones', 201, 7000),
+  ('Jennifer', 'Brown', 202, 6500),
+  ('David', 'Davis', 203, 6000),
+  ('Joseph', 'Miller', 301, 8000),
+  ('Lisa', 'Wilson', 302, 7500),
+  ('Karen', 'Moore', 303, 7000),
+  ('Daniel', 'Taylor', 401, 9000);

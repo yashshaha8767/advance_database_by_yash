@@ -1,0 +1,33 @@
+2. Create table Student (Name, RollNo,City ) insert values for 10 Students and apply 
+List and Range partitioning techniques.
+
+CREATE TABLE Student (
+  Name VARCHAR(50),
+  RollNo INT,
+  City VARCHAR(50)
+)
+PARTITION BY LIST (City) (
+  PARTITION pA VALUES IN ('New York', 'Los Angeles', 'Chicago'),
+  PARTITION pB VALUES IN ('San Francisco', 'Seattle', 'Boston'),
+  PARTITION pC VALUES IN ('Houston', 'Dallas', 'Austin'),
+  PARTITION pD VALUES IN (DEFAULT)
+)
+PARTITION BY RANGE (RollNo) (
+  PARTITION p1 VALUES LESS THAN (100),
+  PARTITION p2 VALUES LESS THAN (200),
+  PARTITION p3 VALUES LESS THAN (300),
+  PARTITION p4 VALUES LESS THAN (MAXVALUE)
+);
+
+INSERT INTO Student (Name, RollNo, City)
+VALUES
+  ('John Smith', 101, 'New York'),
+  ('Mary Johnson', 102, 'Los Angeles'),
+  ('Robert Williams', 103, 'Chicago'),
+  ('Michael Jones', 201, 'San Francisco'),
+  ('Jennifer Brown', 202, 'Seattle'),
+  ('David Davis', 203, 'Boston'),
+  ('Joseph Miller', 301, 'Houston'),
+  ('Lisa Wilson', 302, 'Dallas'),
+  ('Karen Moore', 303, 'Austin'),
+  ('Daniel Taylor', 401, 'Miami');

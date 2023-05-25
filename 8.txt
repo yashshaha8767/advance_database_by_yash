@@ -1,0 +1,64 @@
+8. Create structured data types of ORDBMS and perform operations. create table using 
+structured data types, insert data and solve queries.
+ Create ADDRESS User Defined Type
+ Create PERSON UDT containing an embedded ADDRESS UDT
+ChatGPT
+To create structured data types in an Object-Relational Database Management System (ORDBMS) and perform operations, you can follow these steps:
+
+Create the ADDRESS User Defined Type (UDT):
+sql
+Copy code
+CREATE TYPE ADDRESS AS OBJECT (
+  street VARCHAR(100),
+  city VARCHAR(50),
+  state VARCHAR(50),
+  country VARCHAR(50)
+);
+Create the PERSON UDT containing an embedded ADDRESS UDT:
+sql
+Copy code
+CREATE TYPE PERSON AS OBJECT (
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  address ADDRESS
+);
+Create a table using the structured data types:
+sql
+Copy code
+CREATE TABLE employees (
+  emp_id INT,
+  employee_info PERSON
+);
+Insert data into the table:
+sql
+Copy code
+INSERT INTO employees (emp_id, employee_info)
+VALUES (
+  1,
+  PERSON(
+    'John',
+    'Doe',
+    ADDRESS('123 Main St', 'Cityville', 'Stateville', 'Countryland')
+  )
+);
+
+INSERT INTO employees (emp_id, employee_info)
+VALUES (
+  2,
+  PERSON(
+    'Jane',
+    'Smith',
+    ADDRESS('456 Elm St', 'Townsville', 'Provincetown', 'Nationville')
+  )
+);
+Query the data:
+sql
+Copy code
+-- Retrieve the employee details
+SELECT emp_id, employee_info.first_name, employee_info.last_name
+FROM employees;
+
+-- Retrieve the employee's address details
+SELECT emp_id, employee_info.address.street, employee_info.address.city,
+       employee_info.address.state, employee_info.address.country
+FROM employees;
